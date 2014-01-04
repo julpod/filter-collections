@@ -143,4 +143,5 @@ HTML
 
 
 
-Please, let me know if you have any feedback (suggestions, bug, feature request, implementation, contribute, etc). 
+Please, let me know if you have any feedback (suggestions, bug, feature request, implementation, contribute, etc).
+You can write me at j@tooit.com
