@@ -3,10 +3,14 @@ filter-collections
 
 Smart package for Meteor that adds filter and pager behavior to our Meteor's collections.
 
-Features:
-This is a first release that
+Features
+========
+
+Please, let me know if you have any feedback (suggestions, bug, feature request, implementation, contribute, etc).
+You can write me at j@tooit.com.
 
 Filtering
+---------
 
 - Simple filter specifying allowed fields.
 - Advance filtering with Comparison, Logical, Element, Evaluation Query Operators (see http://docs.mongodb.org/manual/reference/operator/query/)
@@ -14,25 +18,34 @@ Filtering
 - Current filter list and management.
 
 Pager
+-----
+
 - Numeric pager with next, previous, first and last behavior.
 - Items per page selector and status.
 
 Sorting
+-------
+
 - Sort results by alowed sort collection's field.
 
 Layout
+------
+
 - Flexible layout with no template provided but a lot of usefull helpers)
 
 
 Install
-´´´
+=======
+
+```
 mrt add filter-collections
-´´´
+```
 
 Usage
+=====
 
 Js
-´´´
+```javascript
 
 PeopleFilter = new Meteor.FilterCollection(People, {
   template: 'peopleList',
@@ -73,11 +86,11 @@ Template.peopleList.helpers({
   }
 });
 
-´´´
+```
 
 HTML
 
-´´´
+```html
   <!-- filter-menu -->
     <ul class="fc-filter">
       <li><a href="#" data-fc-field="some_collection_field_1" data-fc-value="filter_value_1">Filter Value 1</a></li>
@@ -115,7 +128,7 @@ HTML
 
   <!-- pagination -->
 
-    <label></label>el>Items per page</label>
+    <label>Items per page</label>
     <select style="width: 60px;" class="input-sm form-control input-s-sm inline fc-items-per-page m-r-sm">
       {{#each fc.itemsPerPage}}
         <option value="{{value}}" {{status}}>{{value}}</option>
@@ -130,18 +143,15 @@ HTML
     </ul>
 
   <!-- /pagination -->
-´´´
+```
 
 
 
 
+todo
+====
 
+[ ] improve help.
+[ ] write application examples.
+[ ] write tests.
 
-@ todo: improve help.
-@ todo: write application examples.
-@ todo: write tests.
-
-
-
-Please, let me know if you have any feedback (suggestions, bug, feature request, implementation, contribute, etc).
-You can write me at j@tooit.com
