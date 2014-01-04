@@ -141,3 +141,6 @@ HTML
 @ todo: write application examples.
 @ todo: write tests.
 
+
+
+Please, let me know if you have any feedback (suggestions, bug, feature request, implementation, contribute, etc). 
