@@ -1,5 +1,5 @@
 {
-  "name": "Filter Collections",
+  "name": "filter-collections",
   "description": "Smart package for Meteor that adds filter and pager behavior to our Meteor's collections.",
   "homepage": "https://github.com/julianmontagna/filter-collections",
   "author": "Julian Montagna (http://www.tooit.com)",
