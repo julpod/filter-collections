@@ -38,7 +38,7 @@ mrt add filter-collections
 
 ###From github.com
 ```
-git clone https://github.com/julianmontagna/filter-collections
+git clone https://github.com/julianmontagna/filter-collections.git
 ```
 
 ---------------------------------------
