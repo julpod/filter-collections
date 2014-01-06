@@ -1,5 +1,5 @@
 #Filter Collections
-Filter Collections is a Smart package for Meteor that adds Filter and Paging and Sorting behavior to our collections.
+Filter Collections is a Smart package for Meteor that adds Filter, Paging and Sorting behavior to our collections.
 Works well (but independently) with simple-schema and collection2.
 
 ---------------------------------------
