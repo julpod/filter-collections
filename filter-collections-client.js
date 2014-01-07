@@ -2,12 +2,11 @@ Meteor.FilterCollections = function (id, collection, settings) {
   var self = this;
 
   self._id = id;
-  self._idCount = self._id + '-count';
+  self._idCount = self._id + 'Count';
   self._idCollectionCount = self._id + 'CollectionCount';
   self._collectionCount = new Meteor.Collection(self._idCollectionCount);
 
   self._collection = collection;
-  self._count = self._collectionCount;
 
   self._options = settings || {};
   self._options.filters = self._options.filters || [];
@@ -29,6 +28,9 @@ Meteor.FilterCollections = function (id, collection, settings) {
   self._filters = _.extend(self._filters, self._options.filters);
 
   self._pager = _.extend(self._pager, self._options.pager);
+
+  self._currentQuery = {};
+  self._updateQuery = true;
 
   self._deps = {};
   self._deps.items = new Deps.Dependency();
@@ -93,10 +95,9 @@ Meteor.FilterCollections = function (id, collection, settings) {
 
     var activeSearch = [];
     _.each(self._search, function (field, key) {
-      if (!field.mandatory)
-        activeSearch.push(_.extend(field, {
-          key: key
-        }));
+      activeSearch.push(_.extend(field, {
+        key: key
+      }));
     });
 
     return activeSearch;
@@ -323,23 +324,66 @@ Meteor.FilterCollections = function (id, collection, settings) {
    * Reactive subscriptions.
    */
 
-   self.getQuery = function(){
-    Deps.depend(self._deps.items);
-
-    self.queryFields = self.getFilters();
-    self.queryOptions = _.extend(self.getSort(), self.getPager());
-
-    Meteor.subscribe(self._id, self.queryFields, self.queryOptions);
-    Meteor.subscribe(self._idCount, self.queryFields);
-
+  self.updateTotals = function(){
     var totalItems = self._collectionCount.findOne() || {};
     self._pager.totalItems = totalItems.count || 0;
-
     self._deps.templateData.changed();
-   };
+    // console.log(self._pager.totalItems);
+  };
+
+  self.getQuery = function(){
+    Deps.depend(self._deps.items);
+
+    var query = {
+      selector: self.getFilters(),
+      options: _.extend(self.getSort(), self.getPager())
+    };
+
+    self._updateQuery = false;
+    if(!_.isEqual(query, self._currentQuery)){
+      self._currentQuery = query;
+      self._updateQuery = true;
+    }
+
+    return self._currentQuery;
+  };
+
+  self._templateData = function(){
+    Deps.depend(self._deps.templateData);
+
+    return {
+      pages: self.pages(),
+      totalItems: self.totalItems(),
+      skipItems: self.skipItems(),
+      pageOffset: self.pageOffset(),
+      itemsPerPage: self.itemsPerPage(),
+      sortStatus: self.sortStatus(),
+      activeFilters: self.activeFilters(),
+      currentFilters: self.currentFilters(),
+      activeSearch: self.activeSearch(),
+      searchValue: self.searchValue
+    };
+  };
 
   Deps.autorun(function(){
-    self.getQuery();
+
+    var query = self.getQuery();
+
+    if(self._updateQuery && _.isFunction(self._options.beforeSubscribe)){
+      self = _.extend(self, self._options.beforeSubscribe(self.queryFields, self.queryOptions)) || self;
+    }
+
+    Meteor.subscribe(self._id, query, {
+      onReady: function(){
+        if(_.isFunction(self._options.afterSubscribe)){
+          self._options.afterSubscribe(this);
+        }
+      }
+    });
+
+    Meteor.subscribe(self._idCount, query);
+    self.updateTotals();
+
   });
 
   /**
@@ -355,8 +399,7 @@ Meteor.FilterCollections = function (id, collection, settings) {
     var helpers = {};
 
     helpers['fc'] = function () {
-      Deps.depend(self._deps.templateData);
-      return self;
+      return self._templateData();
     };
 
     helpers[self._id] = function(){
@@ -388,11 +431,13 @@ Meteor.FilterCollections = function (id, collection, settings) {
       },
       'click .fc-pager .fc-prev': function (event) {
         event.preventDefault();
+        console.log(1, self.hasPrevious());
         if (self.hasPrevious())
           self.movePrevious();
       },
       'click .fc-pager .fc-next': function (event) {
         event.preventDefault();
+        console.log(1, self.hasNext());
         if (self.hasNext())
           self.moveNext();
       },

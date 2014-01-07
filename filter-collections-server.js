@@ -3,42 +3,41 @@ Meteor.FilterCollections = {};
 Meteor.FilterCollections.publish = function (id, collection, callbacks) {
 
   _id = id;
-  _idCount = _id + '-count';
+  _idCount = _id + 'Count';
   _idCollectionCount = _id + 'CollectionCount';
   _collection = collection;
   _callbacks = callbacks || {};
 
-  Meteor.publish(_id, function (queryFields, queryOptions) {
+  Meteor.publish(_id, function (query) {
 
-    queryFields = queryFields || {};
-    queryOptions = queryOptions || {
+    query = query || {};
+    query.selector = query.selector || {};
+    query.options = query.options || {
       skip: 0,
       limit: 10
     };
 
-    if(_callbacks.beforeQueryFields && _.isFunction(_callbacks.beforeQueryFields))
-      queryFields = _callbacks.beforeQueryFields(queryFields, this) || queryFields;
+    if (_callbacks.beforePublish && _.isFunction(_callbacks.beforePublish))
+      query = _callbacks.beforePublish(this, query) || query;
 
-    if(_callbacks.beforeQueryOptions && _.isFunction(_callbacks.beforeQueryOptions))
-      queryOptions = _callbacks.beforeQueryOptions(queryOptions, this) || queryOptions;
-
-    return _collection.find(queryFields, queryOptions);
+    return _collection.find(query.selector, query.options);
   });
 
-  Meteor.publish(_idCount, function (queryFields) {
+  Meteor.publish(_idCount, function (query) {
 
-    queryFields = queryFields || {};
+    query = query || {};
+    query.selector = query.selector || {};
 
-    if(_callbacks.beforeQueryFields && _.isFunction(_callbacks.beforeQueryFields))
-      queryFields = _callbacks.beforeQueryFields(queryFields, this) || queryFields;
+    if (_callbacks.beforePublish && _.isFunction(_callbacks.beforePublish))
+      query = _callbacks.beforePublish(this, query) || query;
 
-    if(_callbacks.beforeQueryOptions && _.isFunction(_callbacks.beforeQueryOptions))
-      queryOptions = _callbacks.beforeQueryOptions(queryOptions, this) || queryOptions;
+    var count = _collection.find(query.selector).count() || 0;
 
-    var count = _collection.find(queryFields).count() || 0;
     this.added(_idCollectionCount, 'count', {
       count: count
     });
+
+    this.ready();
   });
 
 

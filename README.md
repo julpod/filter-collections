@@ -57,16 +57,15 @@ People = new Meteor.Collection2("people", {...schema...})
 ### JS (Meteor Server side)
 ```javascript
 Meteor.FilterCollections.publish('people', People, {
-  beforeQueryFields: function(queryFields, publisher){
+  beforePublish: function(handler, query){
 
-    if (Roles.userIsInRole(publisher.userId, ['root']))
-      return _.omit(queryFields, 'deleted_at');
+    if (Roles.userIsInRole(handler.userId, ['root']))
+      query.selector = _.omit(query.selector, 'deleted_at');
 
-    if (Roles.userIsInRole(publisher.userId, ['administrator']))
-      return _.extend(queryFields, {deleted_at: null});
-  },
-  beforeQueryOptions: function(queryOptions, publisher){
-    // Alter other query options here ...
+    if (Roles.userIsInRole(handler.userId, ['administrator']))
+      query.selector =  _.extend(query.selector, {deleted_at: { $exists: false }});
+
+    return query;
   }
 });
 ```
@@ -104,6 +103,12 @@ PeopleFilter = new Meteor.FilterCollections('people', People, {
         enabled: true
       }
     }
+  },
+  beforeSubscribe: function(query){
+    Session.set('loading', true);
+  },
+  afterSubscribe: function(subscription){
+    Session.set('loading', false);
   }
 });
 ```
@@ -128,11 +133,11 @@ PeopleFilter = new Meteor.FilterCollections('people', People, {
 
   <!-- current-filters -->
     {{#each fc.currentFilters}}
-      <button href="#" class="fc-current-filter">{{title}} : {{value}}</button>
+      <button href="#" class="fc-clear-filter">{{title}} : {{value}}</button>
     {{/each}}
 
     {{#with fc.activeFilters}}
-      <button href="#" class="fc-clear-filter">Clear All</button>
+      <button href="#" class="fc-clear-filters">Clear All</button>
     {{/with}}
   <!-- /current-filters -->
 
