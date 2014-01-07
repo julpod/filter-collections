@@ -26,6 +26,15 @@ Meteor.FilterCollections.publish = function (id, collection, callbacks) {
   });
 
   Meteor.publish(_idCount, function (queryFields) {
+
+    queryFields = queryFields || {};
+
+    if(_callbacks.beforeQueryFields && _.isFunction(_callbacks.beforeQueryFields))
+      queryFields = _callbacks.beforeQueryFields(queryFields, this) || queryFields;
+
+    if(_callbacks.beforeQueryOptions && _.isFunction(_callbacks.beforeQueryOptions))
+      queryOptions = _callbacks.beforeQueryOptions(queryOptions, this) || queryOptions;
+
     var count = _collection.find(queryFields).count() || 0;
     this.added(_idCollectionCount, 'count', {
       count: count

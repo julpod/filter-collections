@@ -184,11 +184,18 @@ Meteor.FilterCollections = function (id, collection, settings) {
     return activeFilters;
   };
 
-  self.clearFilters = function () {
-    _.each(self._filters, function (filter, key) {
-      if (filter.value)
-        self._filters[key].value = undefined;
-    });
+  self.clearFilters = function (key) {
+    if(key){
+      self._filters[key].value = undefined;
+      if(_.isEmpty(self.currentFilters()))
+        self.searchValue = '';
+    }else{
+      self.searchValue = '';
+      _.each(self._filters, function (filter, key) {
+        if (filter.value)
+          self._filters[key].value = undefined;
+      });
+    }
   };
 
   /**
@@ -205,13 +212,25 @@ Meteor.FilterCollections = function (id, collection, settings) {
   self.itemsPerPage = function () {
     var itemsPerPageList = [];
     var totalItems = self.totalItems();
+    var appendLast = false;
+    var selected = false;
     _.each(self._pager.itemsPerPageOptions, function (value) {
-      if(totalItems >= value)
+      if(totalItems >= value){
+        selected = (self._pager.itemsPerPage === value) ? true : false;
         itemsPerPageList.push({
           value: value,
-          status: (self._pager.itemsPerPage === value) ? 'selected' : ''
+          status: (selected) ? 'selected' : ''
         });
+      }else
+        appendLast = true;
     });
+
+    if (appendLast)
+      itemsPerPageList.push({
+        value: totalItems,
+        status: (!selected) ? 'selected' : ''
+      });
+
     return itemsPerPageList;
   };
 
@@ -395,14 +414,14 @@ Meteor.FilterCollections = function (id, collection, settings) {
 
         self.moveTo(1);
       },
-      'click .fc-current-filter': function (event) {
+      'click .fc-clear-filter': function (event) {
         event.preventDefault();
         if (self._filters[this.key])
-          self._filters[this.key].value = undefined;
+          self.clearFilters(this.key);
 
         self.moveTo(1);
       },
-      'click .fc-clear-filter': function (event) {
+      'click .fc-clear-filters': function (event) {
         event.preventDefault();
         if (self.activeFilters().length)
           self.clearFilters();
@@ -414,10 +433,12 @@ Meteor.FilterCollections = function (id, collection, settings) {
       'click .fc-search': function (event, template) {
         event.preventDefault();
 
+        self.searchValue = template.find('.fc-search-box').value || '';
+
         _.each(self._search, function (field, key) {
           if (field.active)
             self.setFilter(key, {
-              value: template.find('.fc-search-box').value || ''
+              value: self.searchValue
             });
         });
 
