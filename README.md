@@ -91,7 +91,7 @@ With this basic setup you will have the package working for People's Collection.
 ##Configuration
 Lets see some package configuration.
 
-* [Sorting]
+* [Sorting](#Sorting)
 * [Filtering]
 * [Search]
 * [Pager]
