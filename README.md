@@ -95,8 +95,8 @@ Lets see some package configuration.
 * [Filter](#filter)
 * [Search](#search)
 * [Pager](#pager)
-* [Custom queries](#pager)
-* [Callbacks]
+* [Custom queries](#custom-queries)
+* [Callbacks](#callbacks)
 
 ---------------------------------------
 
