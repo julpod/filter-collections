@@ -1,9 +1,9 @@
 {
   "name": "filter-collections",
-  "description": "Smart package for Meteor that adds filter and pager behavior to our Meteor's collections.",
+  "description": "Smart package for Meteor that adds Sorting, Paging, Filter and Search capabilities for our collections.",
   "homepage": "https://github.com/julianmontagna/filter-collections",
   "author": "Julian Montagna (http://www.tooit.com)",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "git": "https://github.com/julianmontagna/filter-collections.git",
   "packages": {}
 }
