@@ -67,6 +67,8 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 ```
 **template**: (optional) a valid template name where to attach package helpers. If not specified, you are still capable of using package methods manually.
 
+Then in your html you will have available **fcResults** helper to iterate for:
+
 ```html
 <table>
 ...
@@ -89,12 +91,12 @@ With this basic setup you will have the package working for People's Collection.
 ##Configuration
 Lets see some package configuration.
 
-* Sorting
-* Filtering
-* Search
-* Pager
-* Doing custom queries
-* Callbacks
+* [Sorting]
+* [Filtering]
+* [Search]
+* [Pager]
+* [Custom queries]
+* [Callbacks]
 
 ---------------------------------------
 
@@ -127,11 +129,11 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 
 ## Templates helpers
 
-The CSS class "fc-sort" indicates that the package will sort the collection results by data-fc-sort value on click event. The attribute data-fc-sort should be any valid field key in your collection.
+The CSS class *fc-sort* indicates that the package will sort the collection results by *data-fc-sort* value on click event. The attribute *data-fc-sort should* be any valid field key in your collection.
 
-You will also have fcSort, a reactive template helper, to detect current sorting values.
+You will also have *fcSort*, a reactive template helper, to detect current sorting values.
 
-#### Examples
+###Sortable table headers
 
 ```html
 <th class="fc-sort" data-fc-sort="name">
@@ -141,17 +143,28 @@ You will also have fcSort, a reactive template helper, to detect current sorting
 </th>
 ```
 
+###Clear Sorts
+```html
+<a href="#" class="fc-sort-clear">Clear sorting</a>
+```
+
 ## Methods
 
 ### .sort.set(field, order, triggerUpdate)
+
 **field**: is a valid key in your collection.
+
 **order**: 'desc', 'asc' or null.
+
 **triggerUpdate**: boolean indicating if the subscriber must be updated after setting the new values.
+
 ```javascript
 PeopleFilter.sort.set(someCollectionField, 'desc', true); // this will set the field order to 'desc'.
 PeopleFilter.sort.set(someCollectionField, null, true); // this will loop over the sort stages described above (default: null, asc, desc)
 ```
+
 This will change object sorting and will trigger a collection update (all at once) but you can also control the process yourself.
+
 ...
 PeopleFilter.sort.set(someCollectionField1, 'desc');
 PeopleFilter.sort.set(someCollectionField2, 'desc');
@@ -161,7 +174,9 @@ PeopleFilter.sort.run();
 ```
 
 ### .sort.get()
+
 Will return the current sort status as an object.
+
 ```javascript
 var sortStatus = PeopleFilter.sort.get();
 
@@ -174,20 +189,20 @@ var sortStatus = PeopleFilter.sort.get();
 ```
 
 ### .sort.run()
+
 Will take the current sorting status and trigger a query update to the subscriber to update results.
+
 ```javascript
 PeopleFilter.sort.run();
 ```
 
 ### .sort.clear()
+
 Will remove all sorting values.
+
 ```javascript
 PeopleFilter.sort.clear(); // Will remove values only.
 PeopleFilter.sort.clear(true); // Will remove values and trigger a query update.
-```
-
-```html
-<a href="#" class="fc-sort-clear">Clear sorting</a>
 ```
 
 ---------------------------------------
