@@ -6,19 +6,19 @@ Works well (but not necessarily) with [Collection2](https://github.com/aldeed/me
 
 ##Features
 
-###Sorting
+###Sort
 Order results by single or multiple collection's fields.
 
 ###Pager
 Manipulate Meteor's Collection results with a classic pager and items per page results.
 
-###Filtering
+###Filter
 Manage subscribe/publication methods smartly, considering collections with very long datasets avoiding to send the entire collection to the client.
 
 ###Search
 Filtering capabilities also let us build basic and complex search areas and perform simple and multiple field search operations.
 
-###Custom queries
+###Queries
 Use package methods to build your own queries and manage results sorted, paginated and filtered.
 
 ###Template helpers
@@ -91,11 +91,11 @@ With this basic setup you will have the package working for People's Collection.
 ##Configuration
 Lets see some package configuration.
 
-* [Sort](#sort)
-* [Filter](#filter)
-* [Search](#search)
-* [Pager](#pager)
-* [Custom queries](#custom-queries)
+* [Sorting](#sorting)
+* [Paginating](#paginating)
+* [Filtering](#filtering)
+* [Searching](#searching)
+* [Queries](#queries)
 * [Callbacks](#callbacks)
 
 ---------------------------------------
@@ -127,7 +127,7 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 
 *Note: If none of these are specified, default (mongodb) sort order will be provided and you will capable anyway to sort your results later with DOM elements o package methods.*
 
-## Templates helpers
+##Templates helpers
 
 The CSS class *fc-sort* indicates that the package will sort the collection results by *data-fc-sort* value on click event. The attribute *data-fc-sort should* be any valid field key in your collection.
 
@@ -207,7 +207,7 @@ PeopleFilter.sort.clear(true); // Will remove values and trigger a query update.
 
 ---------------------------------------
 
-#Pager
+#Paginating
 
 This package provides various pager methods and template helpers to easly manipulate your collection results. You can use all these features together or only some of them, based on your application needs.
 
@@ -234,7 +234,7 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 
 **showPages**: (optional, default is 10) this argument represents the numbers of pages to be displayed on the classic pager.
 
-## Templates helpers
+##Templates helpers
 
 Then in your template you can do the following:
 
@@ -456,7 +456,7 @@ PeopleFilter.pager.setCurrentPage(5, true); // Will update pager and collection 
 
 ---------------------------------------
 
-#Filters
+#Filtering
 
 This package brings easy configurable filters to play with Meteor Collections's documents.
 To allow filtering, the package needs to know what fields are allowed to filter by. So:
@@ -517,7 +517,7 @@ key: {
 
 *Note: the result of this configuration is a dynamic query passed to a subscriber and its publisher returning only filtered results based on recieved criteria.*
 
-## Templates helpers
+##Templates helpers
 
 ### Filter links
 
@@ -703,7 +703,7 @@ PeopleFilter.filter.clear();
 
 ---------------------------------------
 
-#Search
+#Searching
 
 With the filter functionality we are able to set custom seachs in no time.
 
@@ -856,9 +856,9 @@ Meteor.FilterCollections.publish(People, {
 
 ---------------------------------------
 
-#Custom Queries
+#Queries
 
-There is a public reactive data source available to use manually if needed with the following methods.
+To perform custom queries and still get paging, filter and other package functionalities, there is a public reactive data source available to use with the following methods.
 
 ## .query.get()
 
