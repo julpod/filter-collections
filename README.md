@@ -91,16 +91,16 @@ With this basic setup you will have the package working for People's Collection.
 ##Configuration
 Lets see some package configuration.
 
-* [Sorting]
-* [Filtering]
-* [Search]
-* [Pager]
-* [Custom queries]
+* [Sort](#sort)
+* [Filter](#filter)
+* [Search](#search)
+* [Pager](#pager)
+* [Custom queries](#pager)
 * [Callbacks]
 
 ---------------------------------------
 
-#Sort
+#Sorting
 
 This package lets you sort results in an easy way. You can sort by one or multiple fields at a time and each one will have three moments: null (not sorted), asc (ascending) or desc (descending). For more information see [Specifiers](http://docs.meteor.com/#sortspecifiers "Specifiers").
 
@@ -225,6 +225,7 @@ PeopleFilter = new Meteor.FilterCollections(People, {
   //...
 });
 ```
+
 **options**: (optional, default is [10, 20, 30, 40, 50]) an array containing the allowed values to limit the collection results.
 
 **itemsPerPage**: (optional, default is 10) is the default limit applied to collection results. This will prevent us from loading all the collection documents at once and could be easly combined with pager.options values as described above setting the CSS class "fc-pager-options".
@@ -238,6 +239,7 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 Then in your template you can do the following:
 
 ### Items per page
+
 Build a dropdown menu or custom links to let the user select the amount of results that should be displayed.
 
 ```html
@@ -249,7 +251,9 @@ Build a dropdown menu or custom links to let the user select the amount of resul
 </select>
 <!-- /items per page -->
 ```
+
 **fcPager.options.value**: contains the row option value.
+
 **fcPager.options.status**: contains the row status (selected or an empty string).
 
 You can also add itemsPerPage behaviour with links or any DOM clickeable element if you specify the class "fc-pager-option" and a custom html attribute "data-fc-pager-page".
@@ -265,6 +269,7 @@ You can also add itemsPerPage behaviour with links or any DOM clickeable element
 ```
 
 ### Pager status.
+
 You can use package reactive datasources to notify the user where the current pager status.
 
 ```html
@@ -293,18 +298,21 @@ You can use package reactive datasources to notify the user where the current pa
   </ul>
   <!-- /numbered pager -->
 ```
-Elements with CSS class **fc-pager-first** will move the currentPage value to the first page if possible.
-Elements with CSS class **fc-pager-previous** will move the currentPage value to the previous page if possible.
-Elements with CSS class **fc-pager-next** will move the currentPage value to the next page if present page if possible.
-Elements with CSS class **fc-pager-first** will move the currentPage value to the last page if possible.
-Elements with CSS class **fc-pager-page** will move the currentPage value to the specified number at "data-fc-pager-page" html attribute.
 
-fcPager.pages.status: active or an empty string.
-fcPager.pages.page: the current page number.
+* **fc-pager-first** will move the currentPage value to the first page if possible.
+* **fc-pager-previous** will move the currentPage value to the previous page if possible.
+* **fc-pager-next** will move the currentPage value to the next page if present page if possible.
+* **fc-pager-first** will move the currentPage value to the last page if possible.
+* **fc-pager-page** will move the currentPage value to the specified number at "data-fc-pager-page" html attribute.
+
+**fcPager.pages.status**: active or an empty string.
+
+**fcPager.pages.page**: the current page number.
 
 ## Full pager example:
 
-### JS
+### Javascript
+
 ```javascript
 PeopleFilter = new Meteor.FilterCollections(People, {
   //...
@@ -319,6 +327,7 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 ```
 
 ### Template
+
 ```html
   <!-- items per page -->
   <select class="fc-pager-options">
@@ -351,63 +360,95 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 ## Methods
 
 ### .pager.set(triggerUpdate)
+
 Will update pager template data based on current _pager status.
+
+**triggerUpdate**: boolean indicating if the subscriber must be updated after setting the new values.
+
 ```javascript
 PeopleFilter.pager.set(); // Will update template data only.
 PeopleFilter.pager.set(true); // Will update template data and collection results based on pager current status.
 ```
 
 ### .pager.get()
+
 Will return the current _pager object.
+
 ```javascript
 var pagerStatus = PeopleFilter.pager.get();
 ```
 
 ### .pager.run()
+
 Will filter collection results based on the current pager status.
+
 ```javascript
 PeopleFilter.pager.run();
 ```
 
 ### .pager.moveTo(page)
+
 Will request collection publisher for update results for page.
+
+**page**: the page number to move the cursor.
+
 ```javascript
 PeopleFilter.pager.moveTo(4);
 ```
 
 ### .pager.movePrevious()
+
 Will request collection publisher to update results for the previous page (if cursos is not in the first page already).
+
 ```javascript
 PeopleFilter.pager.movePrevious();
 ```
 
 ### .pager.moveFirst()
+
 Will request collection publisher to update results for the first page (if cursos is not in the first page already).
+
 ```javascript
 PeopleFilter.pager.moveFirst();
 ```
 
 ### .pager.moveNext()
+
 Will request collection publisher to update results for the next page (if cursos is not in the last page already).
+
 ```javascript
 PeopleFilter.pager.moveNext();
 ```
 
 ### .pager.moveLast()
+
 Will request collection publisher to update results for the last page (if cursos is not in the last page already).
+
 ```javascript
 PeopleFilter.pager.moveLast();
 ```
 
 ### .pager.setItemsPerPage(itemsNumber, triggerUpdate)
+
 Will request collection publisher to update results based on this limit.
+
+**itemsNumber**: the amount of items to be displayed.
+
+**triggerUpdate**: boolean indicating if the subscriber must be updated after setting the new values.
+
 ```javascript
 PeopleFilter.pager.setItemsPerPage(5); // Will update pager only.
 PeopleFilter.pager.setItemsPerPage(5, true); // Will update pager and collection results based on current status.
 ```
 
 ### .pager.setCurrentPage(page, triggerUpdate)
+
 Will request collection publisher for update results for page. This differs from .pager.moveTo because there is no validation before moving the page cursor.
+
+**page**: the page number to move the cursor.
+
+**triggerUpdate**: boolean indicating if the subscriber must be updated after setting the new values.
+
 ```javascript
 PeopleFilter.pager.setCurrentPage(5); // Will update pager only.
 PeopleFilter.pager.setCurrentPage(5, true); // Will update pager and collection results based on current status.
@@ -547,11 +588,11 @@ Template.peopleFilter.helpers({
 
 You can add the following attributes to any clickeable DOM element with the css class "fc-filter" attached.
 
-**data-fc-filter-field**: required
-**data-fc-filter-value**: required
-**data-fc-filter-operator**: optional
-**data-fc-filter-options**: optional
-**data-fc-filter-sort**: optional
+* **data-fc-filter-field**: required
+* **data-fc-filter-value**: required
+* **data-fc-filter-operator**: optional
+* **data-fc-filter-options**: optional
+* **data-fc-filter-sort**: optional
 
 Why do I have to specify filter setup twice?
 Well, first of all, you don't 'have' to. Attributes used in DOM will override the ones provided in configuration. The main idea for this package is to be flexible and let you use filters on HTML and JS at the same time or independently.
@@ -585,6 +626,7 @@ or
 ```
 
 ### Filter pills
+
 You have available **fcFilterActive** helper with a reactive datasource for display current filter status.
 
 ```html
@@ -600,26 +642,38 @@ You have available **fcFilterActive** helper with a reactive datasource for disp
 ## Methods
 
 ### .filter.get()
+
 Will return the allowed filter object with current status.
+
 ```javascript
 var filterDefinition = PeopleFilter.filter.get();
 ```
 
 ### .filter.set(key, filter, triggerUpdate)
-**key**: Collection field name.
-**filter**: an object to replace or add to the filter list (eg. {value: 1234, condition: '$or'})
-**triggerUpdate**: boolean indicating if the subscriber must be updated after setting the new values.
+
 Will add or overwrite a filter.
+
+**key**: Collection field name.
+
+**filter**: an object to replace or add to the filter list (eg. {value: 1234, condition: '$or'})
+
+**triggerUpdate**: boolean indicating if the subscriber must be updated after setting the new values.
+
 ```javascript
 PeopleFilter.filter.set('name', {value:'John', operator: ['$neq']}); // Will update the filter and perform a query update.
 PeopleFilter.filter.set('account_balance', {value:0, operator: ['$gt']}, false); // Will set the update but without performing a query update.
 ```
 
 ### .filter.isActive(field, value, operator)
-**field**: the active filter key to check.
-**value**: the value to check for.
-**operator**: (optional) operator assigned (if not present, verification will be made only with field and value).
+
 Will return the allowed filter object with current status.
+
+**field**: the active filter key to check.
+
+**value**: the value to check for.
+
+**operator**: (optional) operator assigned (if not present, verification will be made only with field and value).
+
 ```javascript
 PeopleFilter.filter.isActive('name', 'John');
 PeopleFilter.filter.isActive('account_balance', 0, '$lt');
@@ -627,15 +681,21 @@ PeopleFilter.filter.isActive('account_balance', 0, '$gt');
 ```
 
 ### .filter.run()
+
 Build the query with the current filter status and run a subscription update.
+
 ```javascript
 PeopleFilter.filter.run();
 ```
 
 ### .filter.clear(key, triggerUpdate)
+
 Clear active filters if no argument is recieved.
+
 **key**: Collection field name to be deleted from filters.
+
 **triggerUpdate**: boolean indicating if the subscriber must be updated after setting the new values.
+
 ```javascript
 PeopleFilter.filter.clear('name');
 PeopleFilter.filter.clear();
@@ -644,6 +704,7 @@ PeopleFilter.filter.clear();
 ---------------------------------------
 
 #Search
+
 With the filter functionality we are able to set custom seachs in no time.
 
 ```html
@@ -653,16 +714,20 @@ With the filter functionality we are able to set custom seachs in no time.
   <button type="submit" class="fc-search-trigger" data-fc-search-trigger="search-box">Search</button>
 </form>
 ```
+
 When **fc-search-trigger** is clicked, the package will take teh value **data-fc-search-trigger** and will look for a DOM element **data-fc-search-target** that match the value.
 Once there, will take all filters with the **searchable** value *('required' or 'optional')* and will perform a subscription update.
 
 ##Template helpers
+
 There is a **fcFilterSearchable** helper with **criteria** and **available** as childs.
 
 **criteria**: will maintain the value of the current search.
+
 **available**: is a list with all "searchable" fields.
 
 ###Toggle Search fields
+
 ```html
 {{#each available}}
   <a href="#" class="fc-search-fields">{{#if active}}Disable{{else}}Enable{{/if}} {{title}} filter</a>
@@ -672,45 +737,63 @@ There is a **fcFilterSearchable** helper with **criteria** and **available** as 
 ##Methods
 
 ### .search.getFields(required)
+
 Returns all searchable fields.
+
 **required**: boolean indicating if the method should return all searchable fields 'required' and 'optional' (true) or only 'optional' (null or false)
+
 ```javascript
 var fields = PeopleFilter.search.getFields(true);
 ```
 
 ### .search.setField(key)
+
 Will set the passed key as an active searchable filter. This will override default setup.
+
 **key**: a valid filter key.
+
 ```javascript
 PeopleFilter.search.setField('name');
 PeopleFilter.search.setField('account_balance');
 ```
 
 ### .search.setCriteria(criteria, triggerUpdate)
+
 Will update the search value.
+
 **criteria**: value to be searched within searchable fields.
+
 **triggerUpdate**: boolean indicating if the subscriber must be updated after setting the new values (false by default).
+
 ```javascript
 PeopleFilter.search.setCriteria('Lorem Ipsum', true); //Will set the criteria and perform a subscription update
 PeopleFilter.search.setCriteria('Lorem Ipsum'); //Will only set the criteria
 ```
 
 ### .search.getCriteria()
+
 Will return the current search value.
+
 ```javascript
 var search = PeopleFilter.search.getCriteria();
 ```
 
 ### .search.run()
+
 Build the query with the current search status and run a subscription update.
+
 ```javascript
 PeopleFilter.search.run();
 ```
 
 ### .search.clear(key, triggerUpdate)
+
 Clear active search if no argument is recieved.
+
 **key**: Collection field name to be deleted from search.
+
 **triggerUpdate**: boolean indicating if the subscriber must be updated after setting the new values.
+
 ```javascript
 PeopleFilter.search.clear('name'); // Will unset only the name field.
 PeopleFilter.search.clear(); // will unset all the active search and filters.
@@ -721,7 +804,9 @@ PeopleFilter.search.clear(); // will unset all the active search and filters.
 #Callbacks
 
 ##Client side
+
 You can intercept the query object before sent to the server and you can also intercept the subscription once is ready.
+
 ```javascript
 PeopleFilter = new Meteor.FilterCollections(People, {
   //...
@@ -737,7 +822,9 @@ PeopleFilter = new Meteor.FilterCollections(People, {
   //...
 });
 ```
+
 **beforeSubscribe**: you can use the passed query object for your own purpose or modify it before the request (this last one needs to return the query object).
+
 **afterSubscribe**: you can play with the subscription object and handle your own ready() statements.
 
 ##Server side
@@ -761,8 +848,10 @@ Meteor.FilterCollections.publish(People, {
     return cursor;
   }
 });
+```
 
 **beforePublish**: you can alter the query object before doing any Mongo stuff.
+
 **afterPublish**: you can play with the returned Collection Cursor object to alter the resulset.
 
 ---------------------------------------
@@ -772,16 +861,20 @@ Meteor.FilterCollections.publish(People, {
 There is a public reactive data source available to use manually if needed with the following methods.
 
 ## .query.get()
+
 Will return the current query object.
+
 ```javascript
 PeopleFilter.query.get();
 ```
 
 ## .query.set(value)
-Will set a new query and update subscription results.
-**value**: an object with two properties **selector** and **options**.
-```javascript
 
+Will set a new query and update subscription results.
+
+**value**: an object with two properties **selector** and **options**.
+
+```javascript
   var myQuery = {
     selector: {
       name: 'Lorem Ipsum'
