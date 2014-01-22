@@ -599,8 +599,9 @@ Meteor.FilterCollections = function (collection, settings) {
       this.set(_query);
     },
     getResults: function(){
-      var sort = (_query.options.sort) ? _query.options.sort : {};
-      return self._collection.find({}, sort);
+      var q = _.clone(_query);
+      q.options = _.omit(mquery.options, 'skip', 'limit');
+      return self._collection.find(q.selector, q.options);
     }
   };
 
