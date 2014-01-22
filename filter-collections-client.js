@@ -600,7 +600,7 @@ Meteor.FilterCollections = function (collection, settings) {
     },
     getResults: function(){
       var q = _.clone(_query);
-      q.options = _.omit(mquery.options, 'skip', 'limit');
+      q.options = _.omit(q.options, 'skip', 'limit');
       return self._collection.find(q.selector, q.options);
     }
   };
