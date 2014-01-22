@@ -80,7 +80,7 @@ Meteor.FilterCollections = function (collection, settings) {
       _subs.count = Meteor.subscribe(_subscriptionCountId, query);
 
       if(_subs.count.ready()){
-        var res = self._collectionCount.findOne({});
+        var res = self._collectionCount.findOne({query:query});
         self.pager.setTotals(res);
       }
 
@@ -103,13 +103,8 @@ Meteor.FilterCollections = function (collection, settings) {
 
       var ret = {};
       _.each(_sorts, function (sort) {
-        for(var parts = sort[0].split('.'), i=0, l=parts.length, cache=ret; i<l; i++) {
-            if(!cache[parts[i]])
-                cache[parts[i]] = {};
-            if(i === l-1)
-              cache[parts[i]][sort[1]] = true;
-            cache = cache[parts[i]];
-        }
+        ret[sort[0]] = {};
+        ret[sort[0]][sort[1]] = true;
       });
 
       return ret;
@@ -594,13 +589,8 @@ Meteor.FilterCollections = function (collection, settings) {
       _deps.query.changed();
       return;
     },
-    updateResults: function(){
-      _query.force = new Date().getTime();
-      this.set(_query);
-    },
     getResults: function(){
-      var sort = (_query.options.sort) ? _query.options.sort : {};
-      return self._collection.find({}, sort);
+      return self._collection.find({});
     }
   };
 
@@ -621,7 +611,12 @@ Meteor.FilterCollections = function (collection, settings) {
       _subs.count.stop();
     };
 
+    /** Template helpers. **/
+
     Template[_template].helpers({
+      isActiveFilter: function(field, value, operator){
+      return self.filter.isActive(field, value, operator);
+      },
       fcResults: function(){
         return self.query.getResults();
       },
@@ -642,14 +637,8 @@ Meteor.FilterCollections = function (collection, settings) {
           available: self.search.getFields(),
           criteria: self.search.getCriteria()
         };
-      },
-      fcFilterObj: function(){
-        return self.filter;
-      },
-      fcPagerObj: function(){
-        return self.pager;
       }
-    });
+    })
 
     /** Template events. **/
     Template[_template].events({
@@ -754,4 +743,7 @@ Meteor.FilterCollections = function (collection, settings) {
   } else {
     _autorun();
   }
+
+  
+
 };
