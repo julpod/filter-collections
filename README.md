@@ -597,13 +597,13 @@ You can add the following attributes to any clickeable DOM element with the css 
 Why do I have to specify filter setup twice?
 Well, first of all, you don't 'have' to. Attributes used in DOM will override the ones provided in configuration. The main idea for this package is to be flexible and let you use filters on HTML and JS at the same time or independently.
 
-For getting filter status from template (to set active classes for example), I've provided a Handlebars helper 'isActiveFilter' that could be used like this:
+For getting filter status from template (to set active classes for example), I've provided a template helper 'fcFilterObj' and 'fcPagerObj' to use object methods from your template. Example:
 
 <!-- custom filter links-->
-  <a href="#" class="fc-filter {{#if isActiveFilter 'type' 'customer'}}active{{/if}}" data-fc-filter-field="type" data-fc-filter-value="customer" >
+  <a href="#" class="fc-filter {{#if fcFilterObj.isActive 'type' 'customer'}}active{{/if}}" data-fc-filter-field="type" data-fc-filter-value="customer" >
     Show me my Customers
   </a>
-  <a href="#" class="fc-filter {{#if isActiveFilter 'type' 'suppliers'}}active{{/if}}" data-fc-filter-field="type" data-fc-filter-value="suppliers" >
+  <a href="#" class="fc-filter {{#if fcFilterObj.isActive 'type' 'suppliers'}}active{{/if}}" data-fc-filter-field="type" data-fc-filter-value="suppliers" >
     Show me my Suppliers
   </a>
 <!-- /custom filter links -->
@@ -614,7 +614,7 @@ or
 <!-- custom filter dynamic-->
   {{#each categories}}
     <a href="# "
-      class="fc-filter {{#if isActiveFilter field value operator}}active{{/if}}"
+      class="fc-filter {{#if ../fcFilterObj.isActive field value operator}}active{{/if}}"
       data-fc-filter-field="{{field}}"
       data-fc-filter-value="{{value}}"
       data-fc-filter-operator="{{operator}}">

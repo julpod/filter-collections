@@ -80,7 +80,7 @@ Meteor.FilterCollections = function (collection, settings) {
       _subs.count = Meteor.subscribe(_subscriptionCountId, query);
 
       if(_subs.count.ready()){
-        var res = self._collectionCount.findOne({query:query});
+        var res = self._collectionCount.findOne({});
         self.pager.setTotals(res);
       }
 
@@ -589,8 +589,13 @@ Meteor.FilterCollections = function (collection, settings) {
       _deps.query.changed();
       return;
     },
+    updateResults: function(){
+      _query.force = new Date().getTime();
+      this.set(_query);
+    },
     getResults: function(){
-      return self._collection.find({});
+      var sort = (_query.options.sort) ? _query.options.sort : {};
+      return self._collection.find({}, sort);
     }
   };
 
@@ -610,6 +615,36 @@ Meteor.FilterCollections = function (collection, settings) {
       _subs.results.stop();
       _subs.count.stop();
     };
+
+    Template[_template].helpers({
+      fcResults: function(){
+        return self.query.getResults();
+      },
+      fcSort: function(){
+        return self.sort.get();
+      },
+      fcPager: function(){
+        return self.pager.get();
+      },
+      fcFilter: function(){
+        return self.filter.get();
+      },
+      fcFilterActive: function(){
+        return self.filter.getActive();
+      },
+      fcFilterSearchable: function(){
+        return {
+          available: self.search.getFields(),
+          criteria: self.search.getCriteria()
+        };
+      },
+      fcFilterObj: function(){
+        return self.filter;
+      },
+      fcPagerObj: function(){
+        return self.pager;
+      }
+    });
 
     /** Template events. **/
     Template[_template].events({
@@ -714,43 +749,4 @@ Meteor.FilterCollections = function (collection, settings) {
   } else {
     _autorun();
   }
-
-  /**
-   * Handlebars Helpers.
-   */
-
-  if (typeof Handlebars !== 'undefined') {
-
-    Handlebars.registerHelper('isActiveFilter', function(field, value, operator){
-      return self.filter.isActive(field, value, operator);
-    });
-
-    Handlebars.registerHelper('fcResults', function(){
-      return self.query.getResults();
-    });
-
-    Handlebars.registerHelper('fcSort', function(){
-      return self.sort.get();
-    });
-
-    Handlebars.registerHelper('fcPager', function(){
-      return self.pager.get();
-    });
-
-    Handlebars.registerHelper('fcFilter', function(){
-      return self.filter.get();
-    });
-
-    Handlebars.registerHelper('fcFilterActive', function(){
-      return self.filter.getActive();
-    });
-
-    Handlebars.registerHelper('fcFilterSearchable', function(){
-      return {
-        available: self.search.getFields(),
-        criteria: self.search.getCriteria()
-      };
-    });
-  }
-
 };
