@@ -26,7 +26,7 @@ Meteor.FilterCollections.publish = function (collection, callbacks) {
     };
 
     if (callbacks.beforePublish && _.isFunction(callbacks.beforePublish))
-      query = callbacks.beforePublish(query) || query;
+      query = callbacks.beforePublish(query, this) || query;
 
     cursor = collection.find(query.selector, query.options);
 
@@ -47,7 +47,7 @@ Meteor.FilterCollections.publish = function (collection, callbacks) {
     query.selector = query.selector || {};
 
     if(callbacks.beforePublish && _.isFunction(callbacks.beforePublish))
-      query = callbacks.beforePublish(query) || query;
+      query = callbacks.beforePublish(query, this) || query;
 
     count = collection.find(query.selector).count() || 0;
 

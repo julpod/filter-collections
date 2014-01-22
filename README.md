@@ -831,7 +831,7 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 
 ```javascript
 Meteor.FilterCollections.publish(People, {
-  beforePublish: function(query){
+  beforePublish: function(query, handler){
 
     if (Roles.userIsInRole(handler.userId, ['root']))
       query.selector = _.omit(query.selector, 'deleted_at');
