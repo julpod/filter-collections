@@ -103,8 +103,13 @@ Meteor.FilterCollections = function (collection, settings) {
 
       var ret = {};
       _.each(_sorts, function (sort) {
-        ret[sort[0]] = {};
-        ret[sort[0]][sort[1]] = true;
+        for(var parts = sort[0].split('.'), i=0, l=parts.length, cache=ret; i<l; i++) {
+            if(!cache[parts[i]])
+                cache[parts[i]] = {};
+            if(i === l-1)
+              cache[parts[i]][sort[1]] = true;
+            cache = cache[parts[i]];
+        }
       });
 
       return ret;
