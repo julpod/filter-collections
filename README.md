@@ -599,6 +599,7 @@ Well, first of all, you don't 'have' to. Attributes used in DOM will override th
 
 For getting filter status from template (to set active classes for example), I've provided a template helper 'fcFilterObj' and 'fcPagerObj' to use object methods from your template. Example:
 
+```html
 <!-- custom filter links-->
   <a href="#" class="fc-filter {{#if fcFilterObj.isActive 'type' 'customer'}}active{{/if}}" data-fc-filter-field="type" data-fc-filter-value="customer" >
     Show me my Customers
@@ -607,6 +608,7 @@ For getting filter status from template (to set active classes for example), I'v
     Show me my Suppliers
   </a>
 <!-- /custom filter links -->
+```
 
 or
 
