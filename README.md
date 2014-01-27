@@ -40,6 +40,18 @@ git clone https://github.com/julianmontagna/filter-collections.git
 
 ---------------------------------------
 
+##Application Example
+
+There is work-in-progress application example at:
+
+Demo: [http://filtercollections.meteor.com/ ](http://filtercollections.meteor.com/ "http://filtercollections.meteor.com/ ")
+
+GitHub: [https://github.com/krishamoud/filter-collections-example](https://github.com/krishamoud/filter-collections-example "https://github.com/krishamoud/filter-collections-example")
+
+Thanks [krishamoud](https://github.com/krishamoud "krishamoud")!
+
+---------------------------------------
+
 ##Usage
 
 Considering the "People" Collection created:
