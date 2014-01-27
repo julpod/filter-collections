@@ -819,6 +819,17 @@ PeopleFilter = new Meteor.FilterCollections(People, {
     },
     afterSubscribe: function (subscription) {
       Session.set('loading', false);
+    },
+    beforeResults: function(query){
+      query.selector._id = {$ne: Meteor.userId()};
+      return query;
+    },
+    afterResults: function(cursor){
+      var alteredResults = cursor.fetch();
+      _.each(alteredResults, function(result, idx){
+        alteredResults[idx].name = alteredResults[idx].name.toUpperCase();
+      });
+      return alteredResults;
     }
   }
   //...
@@ -827,12 +838,26 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 
 **beforeSubscribe**: you can use the passed query object for your own purpose or modify it before the request (this last one needs to return the query object).
 
-**afterSubscribe**: you can play with the subscription object and handle your own ready() statements.
+**afterSubscribe**: you can play with the subscription object and handle your own ready() and stop() statements.
+
+**beforeSubscribeCount**: you can use the passed query on the result count publisher for your own purpose or modify it before the request (this last one needs to return the query object).
+
+**afterSubscribeCount**: you can play with the result count subscription object and handle your own ready() and stop() statements.
+
+**beforeResults**: you could also alter query.getResults() method query to do on-the-fly query manipulation.
+
+**afterResults**: you could also alter client collection results to remove, add or modify documents before they are displayed.
 
 ##Server side
 
 ```javascript
 Meteor.FilterCollections.publish(People, {
+  allow: function(){
+
+    //... do some custom validation (like user permissions)...
+
+    return false;
+  },
   beforePublish: function(query, handler){
 
     if (Roles.userIsInRole(handler.userId, ['root']))
@@ -851,6 +876,8 @@ Meteor.FilterCollections.publish(People, {
   }
 });
 ```
+
+**allow**: (true by default) allow callback will prevent the publisher to be executed. Should be helpful to do some custom validation from server-side.
 
 **beforePublish**: you can alter the query object before doing any Mongo stuff.
 

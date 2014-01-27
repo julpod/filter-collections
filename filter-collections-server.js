@@ -15,6 +15,15 @@ Meteor.FilterCollections.publish = function (collection, callbacks) {
 
   Meteor.publish(publisherResultsId, function (query) {
 
+    var allow = true;
+
+    if (callbacks.allow && _.isFunction(callbacks.allow))
+      allow = callbacks.allow(query);
+
+    if(!allow){
+      throw new Meteor.Error(417, 'Not allowed');
+    }
+
     query = (query && !_.isEmpty(query)) ? query : {};
 
     query.selector = query.selector || {};
