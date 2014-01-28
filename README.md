@@ -855,37 +855,21 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 
 **beforeSubscribe**: you can use the passed query object for your own purpose or modify it before the request (this last one needs to return the query object).
 
-<<<<<<< HEAD
-**afterSubscribe**: you can play with the subscription object and handle your own ready() and stop() statements.
-
-**beforeSubscribeCount**: you can use the passed query on the result count publisher for your own purpose or modify it before the request (this last one needs to return the query object).
-
-**afterSubscribeCount**: you can play with the result count subscription object and handle your own ready() and stop() statements.
-
-**beforeResults**: you could also alter query.getResults() method query to do on-the-fly query manipulation.
-
-**afterResults**: you could also alter client collection results to remove, add or modify documents before they are displayed.
-=======
 **afterSubscribe**: you can play with the subscription object and handle your own `ready()` statements.
->>>>>>> 0.1.1
 
 ##Server side
 
 ```javascript
 Meteor.FilterCollections.publish(People, {
-<<<<<<< HEAD
-  allow: function(){
-
-    //... do some custom validation (like user permissions)...
-
-    return false;
-  },
-  beforePublish: function(query, handler){
-=======
   name: 'someName',
   callbacks: {
+    allow: function(){
+
+      //... do some custom validation (like user permissions)...
+
+      return false;
+    },
     beforePublish: function(query, handler){
->>>>>>> 0.1.1
 
       if (Roles.userIsInRole(handler.userId, ['root']))
         query.selector = _.omit(query.selector, 'deleted_at');
