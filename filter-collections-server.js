@@ -8,7 +8,7 @@ Meteor.FilterCollections.publish = function (collection, options) {
 
   var cursor = {};
 
-  var name = (options.name) ? options.name : self._collection._name;
+  var name = (options.name) ? options.name : collection._name;
 
   var publisherResultsId = 'fc-' + name + '-results';
   var publisherCountId = 'fc-' + name + '-count';
