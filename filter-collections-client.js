@@ -7,7 +7,13 @@ Meteor.FilterCollections = function (collection, settings) {
   var _EJSONQuery = {};
 
   self._collection = collection || {};
-  self._collectionCount = new Meteor.Collection(collection._name + 'CountFC');
+
+  var name = (_settings.name) ? _settings.name : self._collection._name;
+
+  var _subscriptionResultsId = 'fc-' + name + '-results';
+  var _subscriptionCountId = 'fc-' + name + '-count';
+
+  self._collectionCount = new Meteor.Collection(name + 'CountFC');
 
   var _deps = {
     query: new Deps.Dependency(),
@@ -20,6 +26,10 @@ Meteor.FilterCollections = function (collection, settings) {
   var _callbacks = {
     beforeSubscribe: (_settings.callbacks && _settings.callbacks.beforeSubscribe) ? _settings.callbacks.beforeSubscribe : null,
     afterSubscribe: (_settings.callbacks && _settings.callbacks.afterSubscribe) ? _settings.callbacks.afterSubscribe : null,
+    beforeSubscribeCount: (_settings.callbacks && _settings.callbacks.beforeSubscribeCount) ? _settings.callbacks.beforeSubscribeCount : null,
+    afterSubscribeCount: (_settings.callbacks && _settings.callbacks.afterSubscribeCount) ? _settings.callbacks.afterSubscribeCount : null,
+    beforeResults: (_settings.callbacks && _settings.callbacks.beforeResults) ? _settings.callbacks.beforeResults : null,
+    afterResults: (_settings.callbacks && _settings.callbacks.afterResults) ? _settings.callbacks.afterResults : null,
   };
 
   var _template = _settings.template || {};
@@ -41,9 +51,6 @@ Meteor.FilterCollections = function (collection, settings) {
     results: {},
     count: {}
   };
-
-  var _subscriptionResultsId = 'fc-' + self._collection._name + '-results';
-  var _subscriptionCountId = 'fc-' + self._collection._name + '-count';
 
   _query = {
     selector: {},
@@ -70,16 +77,31 @@ Meteor.FilterCollections = function (collection, settings) {
       if (_.isFunction(_callbacks.beforeSubscribe))
         query = _callbacks.beforeSubscribe(query) || query;
 
-      _subs.results = Meteor.subscribe(_subscriptionResultsId, query);
+      _subs.results = Meteor.subscribe(_subscriptionResultsId, query, {
+        onError: function(error){
+          if (_.isFunction(_callbacks.afterSubscribe))
+            _callbacks.afterSubscribe(error, this);
+        }
+      });
 
-      if(_subs.results.ready()){
-        if (_.isFunction(_callbacks.afterSubscribe))
-          _callbacks.afterSubscribe(this);
-      }
+      if(_subs.results.ready() && _.isFunction(_callbacks.afterSubscribe))
+        _callbacks.afterSubscribe(null, this);
 
-      _subs.count = Meteor.subscribe(_subscriptionCountId, query);
+      if (_.isFunction(_callbacks.beforeSubscribeCount))
+        query = _callbacks.beforeSubscribeCount(query) || query;
+
+      _subs.count = Meteor.subscribe(_subscriptionCountId, query, {
+        onError: function(error){
+          if (_.isFunction(_callbacks.afterSubscribeCount))
+            _callbacks.afterSubscribeCount(error, this);
+        }
+      });
 
       if(_subs.count.ready()){
+
+        if (_.isFunction(_callbacks.afterSubscribeCount))
+          _callbacks.afterSubscribeCount(null, this);
+
         var res = self._collectionCount.findOne({});
         self.pager.setTotals(res);
       }
@@ -104,11 +126,11 @@ Meteor.FilterCollections = function (collection, settings) {
       var ret = {};
       _.each(_sorts, function (sort) {
         for(var parts = sort[0].split('.'), i=0, l=parts.length, cache=ret; i<l; i++) {
-            if(!cache[parts[i]])
-                cache[parts[i]] = {};
-            if(i === l-1)
-              cache[parts[i]][sort[1]] = true;
-            cache = cache[parts[i]];
+          if(!cache[parts[i]])
+              cache[parts[i]] = {};
+          if(i === l-1)
+            cache[parts[i]][sort[1]] = true;
+          cache = cache[parts[i]];
         }
       });
 
@@ -441,7 +463,7 @@ Meteor.FilterCollections = function (collection, settings) {
       return filters;
     },
     isActive: function(field, value, operator){
-      var filters = this.get();
+      var filters = self.filter.get();
 
       if(_.has(filters, field)){
         var check = filters[field];
@@ -601,7 +623,16 @@ Meteor.FilterCollections = function (collection, settings) {
     getResults: function(){
       var q = _.clone(_query);
       q.options = _.omit(q.options, 'skip', 'limit');
-      return self._collection.find(q.selector, q.options);
+
+      if (_.isFunction(_callbacks.beforeResults))
+        q = _callbacks.beforeResults(q) || q;
+
+      var cursor = self._collection.find(q.selector, q.options);
+
+      if (_.isFunction(_callbacks.afterResults))
+        cursor = _callbacks.afterResults(cursor) || cursor;
+
+      return cursor;
     }
   };
 

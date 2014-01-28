@@ -66,7 +66,10 @@ People = new Meteor.Collection2("people", {...schema...});
 ### Meteor Server side
 This package will handle its own publishers (server side) and subscribers (client side) so let's start adding needed configuration on the server.
 ```javascript
-Meteor.FilterCollections.publish(People);
+Meteor.FilterCollections.publish(People, {
+  name: 'someName',
+  callbacks: {/*...*/}
+});
 ```
 
 ### Meteor Client side
@@ -78,6 +81,8 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 });
 ```
 **template**: (optional) a valid template name where to attach package helpers. If not specified, you are still capable of using package methods manually.
+
+**name**: (optional) setting a name to a Filter Collection instance, let you have multiple instances of Filters sharing the same Collection. If it's specified, the same value should be used on Filter Collection`s publisher methods.
 
 Then in your html you will have available **fcResults** helper to iterate for:
 
@@ -845,21 +850,24 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 
 ```javascript
 Meteor.FilterCollections.publish(People, {
-  beforePublish: function(query, handler){
+  name: 'someName',
+  callbacks: {
+    beforePublish: function(query, handler){
 
-    if (Roles.userIsInRole(handler.userId, ['root']))
-      query.selector = _.omit(query.selector, 'deleted_at');
+      if (Roles.userIsInRole(handler.userId, ['root']))
+        query.selector = _.omit(query.selector, 'deleted_at');
 
-    if (Roles.userIsInRole(handler.userId, ['administrator']))
-      query.selector =  _.extend(query.selector, {deleted_at: { $exists: false }});
+      if (Roles.userIsInRole(handler.userId, ['administrator']))
+        query.selector =  _.extend(query.selector, {deleted_at: { $exists: false }});
 
-    return query;
-  },
-  afterPublish: function(cursor){
+      return query;
+    },
+    afterPublish: function(cursor){
 
-    //... your cursor modifier code goes here ...
+      //... your cursor modifier code goes here ...
 
-    return cursor;
+      return cursor;
+    }
   }
 });
 ```
