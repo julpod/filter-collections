@@ -51,6 +51,7 @@ Meteor.FilterCollections.publish = function (collection, callbacks) {
 
   Meteor.publish(publisherCountId, function (query) {
     var self = this;
+    var allow = true;
 
     query = (query && !_.isEmpty(query)) ? query : {};
     query.selector = query.selector || {};
