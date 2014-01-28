@@ -2,9 +2,11 @@ Meteor.FilterCollections = {};
 
 Meteor.FilterCollections.publish = function (collection, options) {
 
+  var self = this;
+
   options = options || {};
 
-  callbacks = options.callbacks || {};
+  var callbacks = options.callbacks || {};
 
   var cursor = {};
 
@@ -22,7 +24,7 @@ Meteor.FilterCollections.publish = function (collection, options) {
 
     var allow = true;
 
-    if (options.allow && _.isFunction(callbacks.allow))
+    if (callbacks.allow && _.isFunction(callbacks.allow))
       allow = callbacks.allow(query, this);
 
     if(!allow){
