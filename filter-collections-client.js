@@ -86,17 +86,10 @@ Meteor.FilterCollections = function (collection, settings) {
 
       if(_subs.results.ready() && _.isFunction(_callbacks.afterSubscribe))
         _callbacks.afterSubscribe(null, this);
-<<<<<<< HEAD
 
       if (_.isFunction(_callbacks.beforeSubscribeCount))
         query = _callbacks.beforeSubscribeCount(query) || query;
 
-=======
-
-      if (_.isFunction(_callbacks.beforeSubscribeCount))
-        query = _callbacks.beforeSubscribeCount(query) || query;
-
->>>>>>> 0.1.1
       _subs.count = Meteor.subscribe(_subscriptionCountId, query, {
         onError: function(error){
           if (_.isFunction(_callbacks.afterSubscribeCount))
