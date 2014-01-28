@@ -22,7 +22,7 @@ Filtering capabilities also let us build basic and complex search areas and perf
 Use package methods to build your own queries and manage results sorted, paginated and filtered.
 
 ###Template helpers
-This module does not attach any template. Instead, it provides usefull helpers to work with.
+This module does not attach any template. Instead, it provides useful helpers to work with.
 
 ---------------------------------------
 
@@ -64,13 +64,13 @@ People = new Meteor.Collection2("people", {...schema...});
 ```
 
 ### Meteor Server side
-This package will handle its own publishers (server side) and subscribers (client side) so lets start adding needed configuration on the server.
+This package will handle its own publishers (server side) and subscribers (client side) so let's start adding needed configuration on the server.
 ```javascript
 Meteor.FilterCollections.publish(People);
 ```
 
 ### Meteor Client side
-Now lets add your collection configuration anywhere you need on the client side.
+Now let's add your collection configuration anywhere you need on the client side.
 ```javascript
 PeopleFilter = new Meteor.FilterCollections(People, {
   template: 'peopleList'
@@ -101,7 +101,7 @@ With this basic setup you will have the package working for People's Collection.
 ---------------------------------------
 
 ##Configuration
-Lets see some package configuration.
+Let's see some package configuration.
 
 * [Sorting](#sorting)
 * [Paginating](#paginating)
@@ -114,7 +114,7 @@ Lets see some package configuration.
 
 #Sorting
 
-This package lets you sort results in an easy way. You can sort by one or multiple fields at a time and each one will have three moments: null (not sorted), asc (ascending) or desc (descending). For more information see [Specifiers](http://docs.meteor.com/#sortspecifiers "Specifiers").
+This package lets you sort results in an easy way. You can sort by one or multiple fields at a time and each one will have three states: `null` (not sorted), `'asc'` (ascending) or `'desc'` (descending). For more information see [Specifiers](http://docs.meteor.com/#sortspecifiers "Specifiers").
 
 You can provide default collection sorting with the following:
 
@@ -133,9 +133,9 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 });
 ```
 
-**order**: (optional) by default, the stage order is ['asc', 'desc'] but if needed, you can set ['desc', 'asc'] so the moments will be null, desc, asc.
+**order**: (optional) by default, the order values are `['asc', 'desc']` but if needed, you can set `['desc', 'asc']` so the states will be `null`, `'desc'`, and `'asc'`.
 
-**defaults**: (optional) if you need to load results in certain order on collection first load, here is the place.
+**defaults**: (optional) if you need to load the results in a certain order when the collection is first loaded, this is the place.
 
 *Note: If none of these are specified, default (mongodb) sort order will be provided and you will capable anyway to sort your results later with DOM elements o package methods.*
 
@@ -719,7 +719,7 @@ PeopleFilter.filter.clear();
 
 #Searching
 
-With the filter functionality we are able to set custom seachs in no time.
+With the filter functionality we are able to set custom searches in no time.
 
 ```html
 <form>
@@ -729,7 +729,7 @@ With the filter functionality we are able to set custom seachs in no time.
 </form>
 ```
 
-When **fc-search-trigger** is clicked, the package will take teh value **data-fc-search-trigger** and will look for a DOM element **data-fc-search-target** that match the value.
+When **fc-search-trigger** is clicked, the package will take the value **data-fc-search-trigger** and will look for a DOM element **data-fc-search-target** that match the value.
 Once there, will take all filters with the **searchable** value *('required' or 'optional')* and will perform a subscription update.
 
 ##Template helpers
@@ -839,7 +839,7 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 
 **beforeSubscribe**: you can use the passed query object for your own purpose or modify it before the request (this last one needs to return the query object).
 
-**afterSubscribe**: you can play with the subscription object and handle your own ready() statements.
+**afterSubscribe**: you can play with the subscription object and handle your own `ready()` statements.
 
 ##Server side
 
@@ -927,4 +927,4 @@ Help build an ecosystem of well maintained, quality Meteor packages by joining t
 
 #Hire
 
-Need support, debugging, or development for your project? You can [hire](www.linkedin.com/in/julianmontagna "hire") me to help out.
+Need support, debugging, or development for your project? You can [hire](http://www.linkedin.com/in/julianmontagna "hire") me to help out.
