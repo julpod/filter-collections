@@ -7,7 +7,13 @@ Meteor.FilterCollections = function (collection, settings) {
   var _EJSONQuery = {};
 
   self._collection = collection || {};
-  self._collectionCount = new Meteor.Collection(collection._name + 'CountFC');
+
+  var name = (_settings.name) ? _settings.name : self._collection._name;
+
+  var _subscriptionResultsId = 'fc-' + name + '-results';
+  var _subscriptionCountId = 'fc-' + name + '-count';
+
+  self._collectionCount = new Meteor.Collection(name + 'CountFC');
 
   var _deps = {
     query: new Deps.Dependency(),
@@ -46,9 +52,6 @@ Meteor.FilterCollections = function (collection, settings) {
     count: {}
   };
 
-  var _subscriptionResultsId = 'fc-' + self._collection._name + '-results';
-  var _subscriptionCountId = 'fc-' + self._collection._name + '-count';
-
   _query = {
     selector: {},
     options: {}
@@ -83,10 +86,17 @@ Meteor.FilterCollections = function (collection, settings) {
 
       if(_subs.results.ready() && _.isFunction(_callbacks.afterSubscribe))
         _callbacks.afterSubscribe(null, this);
+<<<<<<< HEAD
 
       if (_.isFunction(_callbacks.beforeSubscribeCount))
         query = _callbacks.beforeSubscribeCount(query) || query;
 
+=======
+
+      if (_.isFunction(_callbacks.beforeSubscribeCount))
+        query = _callbacks.beforeSubscribeCount(query) || query;
+
+>>>>>>> 0.1.1
       _subs.count = Meteor.subscribe(_subscriptionCountId, query, {
         onError: function(error){
           if (_.isFunction(_callbacks.afterSubscribeCount))

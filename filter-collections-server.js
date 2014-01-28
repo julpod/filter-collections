@@ -1,13 +1,18 @@
 Meteor.FilterCollections = {};
 
-Meteor.FilterCollections.publish = function (collection, callbacks) {
+Meteor.FilterCollections.publish = function (collection, options) {
 
-  callbacks = callbacks || {};
+  options = options || {};
+
+  callbacks = options.callbacks || {};
 
   var cursor = {};
-  var publisherResultsId = 'fc-' + collection._name + '-results';
-  var publisherCountId = 'fc-' + collection._name + '-count';
-  var publisherCountCollectionName = collection._name + 'CountFC';
+
+  var name = (options.name) ? options.name : collection._name;
+
+  var publisherResultsId = 'fc-' + name + '-results';
+  var publisherCountId = 'fc-' + name + '-count';
+  var publisherCountCollectionName = name + 'CountFC';
 
   /**
    * Publish query results.
@@ -17,8 +22,8 @@ Meteor.FilterCollections.publish = function (collection, callbacks) {
 
     var allow = true;
 
-    if (callbacks.allow && _.isFunction(callbacks.allow))
-      allow = callbacks.allow(query);
+    if (options.allow && _.isFunction(callbacks.allow))
+      allow = callbacks.allow(query, this);
 
     if(!allow){
       throw new Meteor.Error(417, 'Not allowed');
@@ -52,6 +57,13 @@ Meteor.FilterCollections.publish = function (collection, callbacks) {
   Meteor.publish(publisherCountId, function (query) {
     var self = this;
     var allow = true;
+
+    if (callbacks.allow && _.isFunction(callbacks.allow))
+      allow = callbacks.allow(query, this);
+
+    if(!allow){
+      throw new Meteor.Error(417, 'Not allowed');
+    }
 
     query = (query && !_.isEmpty(query)) ? query : {};
     query.selector = query.selector || {};
