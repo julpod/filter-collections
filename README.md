@@ -847,7 +847,10 @@ PeopleFilter = new Meteor.FilterCollections(People, {
         alteredResults[idx].name = alteredResults[idx].name.toUpperCase();
       });
       return alteredResults;
-    }
+    },
+    templateCreated: function(template){},
+    templateRendered: function(template){},
+    templateDestroyed: function(template){}
   }
   //...
 });
@@ -856,6 +859,12 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 **beforeSubscribe**: you can use the passed query object for your own purpose or modify it before the request (this last one needs to return the query object).
 
 **afterSubscribe**: you can play with the subscription object and handle your own `ready()` statements.
+
+**templateCreated**: append behaviours to Template.name.created.
+
+**templateRendered**: append behaviours to Template.name.rendered.
+
+**templateDestroyed**: append behaviours to Template.name.destroyed.
 
 ##Server side
 

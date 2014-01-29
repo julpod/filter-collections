@@ -30,6 +30,9 @@ Meteor.FilterCollections = function (collection, settings) {
     afterSubscribeCount: (_settings.callbacks && _settings.callbacks.afterSubscribeCount) ? _settings.callbacks.afterSubscribeCount : null,
     beforeResults: (_settings.callbacks && _settings.callbacks.beforeResults) ? _settings.callbacks.beforeResults : null,
     afterResults: (_settings.callbacks && _settings.callbacks.afterResults) ? _settings.callbacks.afterResults : null,
+    templateCreated: (_settings.callbacks && _settings.callbacks.templateCreated) ? _settings.callbacks.templateCreated : null,
+    templateRendered: (_settings.callbacks && _settings.callbacks.templateRendered) ? _settings.callbacks.templateRendered : null,
+    templateDestroyed: (_settings.callbacks && _settings.callbacks.templateDestroyed) ? _settings.callbacks.templateDestroyed : null,
   };
 
   var _template = _settings.template || {};
@@ -644,6 +647,18 @@ Meteor.FilterCollections = function (collection, settings) {
 
     Template[_template].created = function () {
       _autorun();
+
+      if (_.isFunction(_callbacks.templateCreated))
+        _callbacks.templateCreated(this);
+
+      return;
+    };
+
+    Template[_template].rendered = function () {
+
+      if (_.isFunction(_callbacks.templateRendered))
+        _callbacks.templateRendered(this);
+
       return;
     };
 
@@ -651,6 +666,9 @@ Meteor.FilterCollections = function (collection, settings) {
     Template[_template].destroyed = function () {
       _subs.results.stop();
       _subs.count.stop();
+
+      if (_.isFunction(_callbacks.templateDestroyed))
+        _callbacks.templateDestroyed(this);
     };
 
     Template[_template].helpers({
