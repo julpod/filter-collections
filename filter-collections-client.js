@@ -8,12 +8,12 @@ Meteor.FilterCollections = function (collection, settings) {
 
   self._collection = collection || {};
 
-  var name = (_settings.name) ? _settings.name : self._collection._name;
+  self._name = (_settings.name) ? _settings.name : self._collection._name;
 
-  var _subscriptionResultsId = 'fc-' + name + '-results';
-  var _subscriptionCountId = 'fc-' + name + '-count';
+  var _subscriptionResultsId = 'fc-' + self._name + '-results';
+  var _subscriptionCountId = 'fc-' + self._name + '-count';
 
-  self._collectionCount = new Meteor.Collection(name + 'CountFC');
+  self._collectionCount = new Meteor.Collection(self._name + 'CountFC');
 
   var _deps = {
     query: new Deps.Dependency(),
@@ -55,7 +55,7 @@ Meteor.FilterCollections = function (collection, settings) {
     count: {}
   };
 
-  _query = {
+  var _query = {
     selector: {},
     options: {}
   };
