@@ -729,13 +729,20 @@ Meteor.FilterCollections = function (collection, settings) {
       },
       'click .fc-filter-clear': function (event) {
         event.preventDefault();
+
+        if (self.filter.getActive().length ===1)
+          self.search.clear();
+
         if (_filters[this.key])
           self.filter.clear(this.key);
       },
       'click .fc-filter-reset': function (event) {
         event.preventDefault();
-        if (self.filter.getActive().length)
+
+        if (self.filter.getActive().length){
+          self.search.clear();
           self.filter.clear();
+        }
       },
 
       /** Search **/
