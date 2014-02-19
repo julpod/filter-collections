@@ -872,7 +872,7 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 Meteor.FilterCollections.publish(People, {
   name: 'someName',
   callbacks: {
-    allow: function(){
+    allow: function(query, handler){
 
       //... do some custom validation (like user permissions)...
 
