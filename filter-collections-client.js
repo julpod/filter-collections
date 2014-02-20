@@ -24,7 +24,7 @@ FilterCollections = function (collection, settings) {
     self._collectionCount = collectionCache[collectionCountName];
 
   var _deps = {
-    subscribed: new Deps.Dependency(),
+    initial_ready: new Deps.Dependency(),
     query: new Deps.Dependency(),
     sort: new Deps.Dependency(),
     pager: new Deps.Dependency(),
@@ -70,6 +70,7 @@ FilterCollections = function (collection, settings) {
   };
 
   var _autorun_handle;
+  var _initial_ready; // FilterCollections is ready from e.g. Iron Router perspective
 
   /**
    * [_autorun description]
@@ -122,7 +123,10 @@ FilterCollections = function (collection, settings) {
         self.pager.setTotals(res);
       }
 
-      _deps.subscribed.changed();
+      if(_subs.results.ready() && _subs.count.ready() && !initial_ready){
+        initial_ready = true;
+        _deps.initial_ready.changed();
+      }
     });
 
     return;
@@ -659,8 +663,8 @@ FilterCollections = function (collection, settings) {
 
   self.ready = function ready() {
     _autorun();
-    _deps.subscribed.depend();
-    return _subs.results.ready && _subs.results.ready() && _subs.count.ready && _subs.count.ready();
+    _deps.initial_ready.depend();
+    return initial_ready;
   };
 
   self.stop = function stop() {
