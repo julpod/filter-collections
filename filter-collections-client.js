@@ -24,6 +24,7 @@ FilterCollections = function (collection, settings) {
     self._collectionCount = collectionCache[collectionCountName];
 
   var _deps = {
+    subscribed: new Deps.Dependency(),
     query: new Deps.Dependency(),
     sort: new Deps.Dependency(),
     pager: new Deps.Dependency(),
@@ -68,13 +69,17 @@ FilterCollections = function (collection, settings) {
     options: {}
   };
 
+  var _autorun_handle;
+
   /**
    * [_autorun description]
    * @return {[type]} [description]
    */
   var _autorun = function () {
 
-    Deps.autorun(function (computation) {
+    if(_autorun_handle !== undefined) return;
+
+    _autorun_handle = Deps.autorun(function (computation) {
 
       if (!_initialized) {
         self.sort.init(); // Set default query values for sorting.
@@ -117,6 +122,7 @@ FilterCollections = function (collection, settings) {
         self.pager.setTotals(res);
       }
 
+      _deps.subscribed.changed();
     });
 
     return;
@@ -647,9 +653,30 @@ FilterCollections = function (collection, settings) {
     }
   };
 
+  /**
+   * For integration with e.g. Iron Router
+   */
+
   self.ready = function ready() {
-    return _subs.results.ready && _subs.results.ready() && _subs.count && _subs.count.ready();
+    _autorun();
+    _deps.subscribed.depend();
+    return _subs.results.ready && _subs.results.ready() && _subs.count.ready && _subs.count.ready();
   };
+
+  self.stop = function stop() {
+    if(_autorun_handle !== undefined) {
+      _autorun_handle.stop();
+      _autorun_handle = undefined;
+    }
+    if(_subs.results.stop !== undefined) {
+      _subs.results.stop();
+      _subs.results = {}
+    }
+    if(_subs.count.stop !== undefined) {
+      _subs.count.stop();
+      _subs.count = {}
+    }
+  }
 
   /**
    * Template extensions
