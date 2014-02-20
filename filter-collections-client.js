@@ -1,4 +1,4 @@
-Meteor.FilterCollections = function (collection, settings) {
+FilterCollections = function (collection, settings) {
 
   var self = this;
 
