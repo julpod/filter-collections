@@ -1,3 +1,5 @@
+collectionCache = {};
+
 FilterCollections = function (collection, settings) {
 
   var self = this;
@@ -13,7 +15,11 @@ FilterCollections = function (collection, settings) {
   var _subscriptionResultsId = 'fc-' + self.name + '-results';
   var _subscriptionCountId = 'fc-' + self.name + '-count';
 
-  self._collectionCount = new Meteor.Collection(self.name + 'CountFC');
+  var collectionCountName = self.name + 'CountFC';
+  if(collectionCache[collectionCountName] === undefined)
+    collectionCache[collectionCountName] = self._collectionCount = new Meteor.Collection(collectionCountName);
+  else
+    self._collectionCount = collectionCache[collectionCountName];
 
   var _deps = {
     query: new Deps.Dependency(),
@@ -638,6 +644,10 @@ FilterCollections = function (collection, settings) {
       return cursor;
     }
   };
+
+  self.ready = function ready() {
+    return _subs.results.ready() && _subs.count.ready();
+  }
 
   /**
    * Template extensions
