@@ -1,6 +1,8 @@
 collectionCache = {};
 
 FilterCollections = function (collection, settings) {
+  if(! this instanceof FilterCollections)
+    return new FilterCollections(collection, settings);
 
   var self = this;
 
@@ -646,8 +648,8 @@ FilterCollections = function (collection, settings) {
   };
 
   self.ready = function ready() {
-    return _subs.results.ready() && _subs.count.ready();
-  }
+    return _subs.results.ready && _subs.results.ready() && _subs.count && _subs.count.ready();
+  };
 
   /**
    * Template extensions
