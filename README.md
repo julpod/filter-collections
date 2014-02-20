@@ -66,7 +66,7 @@ People = new Meteor.Collection2("people", {...schema...});
 ### Meteor Server side
 This package will handle its own publishers (server side) and subscribers (client side) so let's start adding needed configuration on the server.
 ```javascript
-Meteor.FilterCollections.publish(People, {
+FilterCollections.publish(People, {
   name: 'someName',
   callbacks: {/*...*/}
 });
@@ -75,7 +75,7 @@ Meteor.FilterCollections.publish(People, {
 ### Meteor Client side
 Now let's add your collection configuration anywhere you need on the client side.
 ```javascript
-PeopleFilter = new Meteor.FilterCollections(People, {
+PeopleFilter = new FilterCollections(People, {
   template: 'peopleList'
   // Other arguments explained later. See Configuration.
 });
@@ -124,7 +124,7 @@ This package lets you sort results in an easy way. You can sort by one or multip
 You can provide default collection sorting with the following:
 
 ```javascript
-PeopleFilter = new Meteor.FilterCollections(People, {
+PeopleFilter = new FilterCollections(People, {
   ...
   sort:{
     order: ['desc', 'asc'],
@@ -231,7 +231,7 @@ This package provides various pager methods and template helpers to easly manipu
 You can provide default collection sorting as:
 
 ```javascript
-PeopleFilter = new Meteor.FilterCollections(People, {
+PeopleFilter = new FilterCollections(People, {
   //...
   pager: {
     options: [5, 10, 15, 25, 50],
@@ -331,7 +331,7 @@ You can use package reactive datasources to notify the user where the current pa
 ### Javascript
 
 ```javascript
-PeopleFilter = new Meteor.FilterCollections(People, {
+PeopleFilter = new FilterCollections(People, {
   //...
   pager: {
     options: [5, 10, 15, 25, 50],
@@ -479,7 +479,7 @@ This package brings easy configurable filters to play with Meteor Collections's 
 To allow filtering, the package needs to know what fields are allowed to filter by. So:
 
 ```javascript
-PeopleFilter = new Meteor.FilterCollections(People, {
+PeopleFilter = new FilterCollections(People, {
   //...
   filters: {
     name: {
@@ -827,7 +827,7 @@ PeopleFilter.search.clear(); // will unset all the active search and filters.
 You can intercept the query object before sent to the server and you can also intercept the subscription once is ready.
 
 ```javascript
-PeopleFilter = new Meteor.FilterCollections(People, {
+PeopleFilter = new FilterCollections(People, {
   //...
   callbacks: {
     beforeSubscribe: function (query) {
@@ -869,7 +869,7 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 ##Server side
 
 ```javascript
-Meteor.FilterCollections.publish(People, {
+FilterCollections.publish(People, {
   name: 'someName',
   callbacks: {
     allow: function(query, handler){
