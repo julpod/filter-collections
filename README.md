@@ -162,7 +162,7 @@ You will also have *fcSort*, a reactive template helper, to detect current sorti
 
 ###Clear Sorts
 ```html
-<a href="#" class="fc-sort-clear">Clear sorting</a>
+<a href="#" class="fc-sort-clear">Clear sorting</a><!-- to put outside of the <table></table> balises as all the following elements-->
 ```
 
 ## Methods
@@ -236,7 +236,7 @@ PeopleFilter = new Meteor.FilterCollections(People, {
   pager: {
     options: [5, 10, 15, 25, 50],
     itemsPerPage: 5,
-    currentPage: 1
+    currentPage: 1,
     showPages: 5,
   }
   //...
@@ -336,7 +336,7 @@ PeopleFilter = new Meteor.FilterCollections(People, {
   pager: {
     options: [5, 10, 15, 25, 50],
     itemsPerPage: 5,
-    currentPage: 1
+    currentPage: 1,
     showPages: 5,
   }
   //...
