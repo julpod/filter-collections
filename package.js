@@ -1,7 +1,7 @@
 Package.describe({
   summary: " Smart package for Meteor that adds filter and pager behavior to our Meteor's collections.",
   version: "0.1.5",
-  git: "https://github.com/tsega/filter-collections"
+  git: "https://github.com/julianmontagna/filter-collections"
 });
 
 Package.onUse(function(api) {
@@ -9,12 +9,12 @@ Package.onUse(function(api) {
 
   api.use('underscore', ['client', 'server']);
 
-  api.addFiles('tsega:filter-collections-client.js', ['client']);
-  api.addFiles('tsega:filter-collections-server.js', ['server']);
+  api.addFiles('filter-collections-client.js', ['client']);
+  api.addFiles('filter-collections-server.js', ['server']);
 });
 
 Package.onTest(function(api) {
   api.use('tinytest');
-  api.use('tsega:filter-collections');
-  api.addFiles('tsega:filter-collections-tests.js');
+  api.use('filter-collections');
+  api.addFiles('filter-collections-tests.js');
 });
