@@ -22,8 +22,6 @@ Use package methods to build your own queries and manage results sorted, paginat
 ### Template helpers
 This module does not attach any template. Instead, it provides useful helpers to work with.
 
----------------------------------------
-
 ## Install
 
 ### From atmosphere.meteor.com
@@ -36,19 +34,9 @@ mrt add filter-collections
 git clone https://github.com/julianmontagna/filter-collections.git
 ```
 
----------------------------------------
-
 ## Application Example
 
-There is work-in-progress application example at:
-
-Demo: [http://filtercollections.meteor.com/ ](http://filtercollections.meteor.com/ "http://filtercollections.meteor.com/ ")
-
-GitHub: [https://github.com/krishamoud/filter-collections-example](https://github.com/krishamoud/filter-collections-example "https://github.com/krishamoud/filter-collections-example")
-
-Thanks [krishamoud](https://github.com/krishamoud "krishamoud")!
-
----------------------------------------
+[http://filter-collections-example.meteor.com/](http://filter-collections-example.meteor.com/)
 
 ## Usage
 
@@ -101,8 +89,6 @@ Then in your html you will have available **fcResults** helper to iterate for:
 
 With this basic setup you will have the package working for People's Collection.
 
----------------------------------------
-
 ## Configuration
 Let's see some package configuration.
 
@@ -112,8 +98,6 @@ Let's see some package configuration.
 * [Searching](#searching)
 * [Queries](#queries)
 * [Callbacks](#callbacks)
-
----------------------------------------
 
 # Sorting
 
@@ -219,8 +203,6 @@ Will remove all sorting values.
 PeopleFilter.sort.clear(); // Will remove values only.
 PeopleFilter.sort.clear(true); // Will remove values and trigger a query update.
 ```
-
----------------------------------------
 
 # Paginating
 
@@ -469,8 +451,6 @@ PeopleFilter.pager.setCurrentPage(5); // Will update pager only.
 PeopleFilter.pager.setCurrentPage(5, true); // Will update pager and collection results based on current status.
 ```
 
----------------------------------------
-
 # Filtering
 
 This package brings easy configurable filters to play with Meteor Collections's documents.
@@ -718,8 +698,6 @@ PeopleFilter.filter.clear('name');
 PeopleFilter.filter.clear();
 ```
 
----------------------------------------
-
 # Searching
 
 With the filter functionality we are able to set custom searches in no time.
@@ -816,8 +794,6 @@ PeopleFilter.search.clear('name'); // Will unset only the name field.
 PeopleFilter.search.clear(); // will unset all the active search and filters.
 ```
 
----------------------------------------
-
 # Callbacks
 
 ## Client side
@@ -902,8 +878,6 @@ Meteor.FilterCollections.publish(People, {
 
 **afterPublish**: you can play with the returned Collection Cursor object to alter the resulset.
 
----------------------------------------
-
 # Queries
 
 To perform custom queries and still get paging, filter and other package functionalities, there is a public reactive data source available to use with the following methods.
@@ -935,8 +909,6 @@ Will set a new query and update subscription results.
   PeopleFilter.query.set(myQuery);
 ```
 
----------------------------------------
-
 # Contributors
 
 I've developed this module for a personal project when noticed that there was no tool at the moment that solve this common needs.
@@ -947,8 +919,6 @@ Let me know if you have any feedback (suggestions, bug, feature request, impleme
 
 Thanks for reading!,
 
----------------------------------------
-
 # Donate
 
 An easy and effective way to support the continued maintenance of this package and the development of new and useful packages is to donate through [Gittip](https://www.gittip.com/julianmontagna/ "Gittip"). or [Paypal](http://www.julianmontagna.com.ar/filter-collections.html "Paypal").
@@ -956,8 +926,6 @@ An easy and effective way to support the continued maintenance of this package a
 Gittip is a platform for sustainable crowd-funding. https://www.gittip.com/about/faq.html
 
 Help build an ecosystem of well maintained, quality Meteor packages by joining the Gittip Meteor Community. https://www.gittip.com/for/meteor/
-
----------------------------------------
 
 # Hire
 

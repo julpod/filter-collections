@@ -1,5 +1,5 @@
 Package.describe({
-  name: "julianmontagna:filter-collections",
+  name: "tooit:filter-collections",
   summary: "Smart package for Meteor that adds filter and pager behavior to our Meteor's collections.",
   version: "1.0.3",
   git: "https://github.com/julianmontagna/filter-collections"
