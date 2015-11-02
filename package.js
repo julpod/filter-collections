@@ -1,10 +1,22 @@
 Package.describe({
-  summary: "Smart package for Meteor that adds filter and pager behavior to our Meteor's collections."
+  summary: "Smart package for Meteor that adds filter and pager behavior to our Meteor's collections.",
+  name: "julianmontagna:filter-collections",
+  version: "1.0.3",
+  git: "https://github.com/julianmontagna/filter-collections"
 });
 
-Package.on_use(function(api) {
-  api.use('underscore', ['client', 'server']);
+Package.onUse(function (api) {
+  api.versionsFrom(['METEOR@0.9.3', 'METEOR@0.9.4', 'METEOR@1.0']);
 
-  api.add_files(['filter-collections-client.js'], ['client']);
-  api.add_files(['filter-collections-server.js'], ['server']);
+  api.use([
+    'underscore',
+    'ejson'
+  ], [
+    'client',
+    'server'
+  ]);
+
+  api.addFiles('filter-collections-client.js', ['client']);
+  api.addFiles('filter-collections-server.js', ['server']);
+  api.export('FilterCollections')
 });

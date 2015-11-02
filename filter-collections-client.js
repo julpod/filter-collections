@@ -1,4 +1,4 @@
-Meteor.FilterCollections = function (collection, settings) {
+FilterCollections = function (collection, settings) {
 
   var self = this;
 
@@ -76,6 +76,7 @@ Meteor.FilterCollections = function (collection, settings) {
       }
 
       var query = self.query.get();
+      console.log(EJSON.stringify(query));
 
       if (_.isFunction(_callbacks.beforeSubscribe))
         query = _callbacks.beforeSubscribe(query) || query;

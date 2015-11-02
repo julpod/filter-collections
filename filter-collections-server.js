@@ -1,6 +1,6 @@
-Meteor.FilterCollections = {};
+FilterCollections = {};
 
-Meteor.FilterCollections.publish = function (collection, options) {
+FilterCollections.publish = function (collection, options) {
 
   var self = this;
 
