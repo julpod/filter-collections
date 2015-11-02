@@ -1,46 +1,44 @@
-#Meteor's Filter Collections
+# Meteor's Filter Collections
 Filter Collections is a Smart package for Meteor that adds Sorting, Paging, Filter and Search capabilities for our collections.
 Works well (but not necessarily) with [Collection2](https://github.com/aldeed/meteor-collection2  "Collection2").
 
----------------------------------------
+## Features
 
-##Features
-
-###Sort
+### Sort
 Order results by single or multiple collection's fields.
 
-###Pager
+### Pager
 Manipulate Meteor's Collection results with a classic pager and items per page results.
 
-###Filter
+### Filter
 Manage subscribe/publication methods smartly, considering collections with very long datasets avoiding to send the entire collection to the client.
 
-###Search
+### Search
 Filtering capabilities also let us build basic and complex search areas and perform simple and multiple field search operations.
 
-###Queries
+### Queries
 Use package methods to build your own queries and manage results sorted, paginated and filtered.
 
-###Template helpers
+### Template helpers
 This module does not attach any template. Instead, it provides useful helpers to work with.
 
 ---------------------------------------
 
-##Install
+## Install
 
-###From atmosphere.meteor.com
+### From atmosphere.meteor.com
 ```
 mrt add filter-collections
 ```
 
-###From github.com
+### From github.com
 ```
 git clone https://github.com/julianmontagna/filter-collections.git
 ```
 
 ---------------------------------------
 
-##Application Example
+## Application Example
 
 There is work-in-progress application example at:
 
@@ -52,7 +50,7 @@ Thanks [krishamoud](https://github.com/krishamoud "krishamoud")!
 
 ---------------------------------------
 
-##Usage
+## Usage
 
 Considering the "People" Collection created:
 ```javascript
@@ -105,7 +103,7 @@ With this basic setup you will have the package working for People's Collection.
 
 ---------------------------------------
 
-##Configuration
+## Configuration
 Let's see some package configuration.
 
 * [Sorting](#sorting)
@@ -117,7 +115,7 @@ Let's see some package configuration.
 
 ---------------------------------------
 
-#Sorting
+# Sorting
 
 This package lets you sort results in an easy way. You can sort by one or multiple fields at a time and each one will have three states: `null` (not sorted), `'asc'` (ascending) or `'desc'` (descending). For more information see [Specifiers](http://docs.meteor.com/#sortspecifiers "Specifiers").
 
@@ -144,13 +142,13 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 
 *Note: If none of these are specified, default (mongodb) sort order will be provided and you will capable anyway to sort your results later with DOM elements o package methods.*
 
-##Templates helpers
+## Templates helpers
 
 The CSS class *fc-sort* indicates that the package will sort the collection results by *data-fc-sort* value on click event. The attribute *data-fc-sort should* be any valid field key in your collection.
 
 You will also have *fcSort*, a reactive template helper, to detect current sorting values.
 
-###Sortable table headers
+### Sortable table headers
 
 ```html
 <th class="fc-sort" data-fc-sort="name">
@@ -160,7 +158,7 @@ You will also have *fcSort*, a reactive template helper, to detect current sorti
 </th>
 ```
 
-###Clear Sorts
+### Clear Sorts
 ```html
 <a href="#" class="fc-sort-clear">Clear sorting</a><!-- to put outside of the <table></table> balises as all the following elements-->
 ```
@@ -224,7 +222,7 @@ PeopleFilter.sort.clear(true); // Will remove values and trigger a query update.
 
 ---------------------------------------
 
-#Paginating
+# Paginating
 
 This package provides various pager methods and template helpers to easly manipulate your collection results. You can use all these features together or only some of them, based on your application needs.
 
@@ -251,7 +249,7 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 
 **showPages**: (optional, default is 10) this argument represents the numbers of pages to be displayed on the classic pager.
 
-##Templates helpers
+## Templates helpers
 
 Then in your template you can do the following:
 
@@ -473,7 +471,7 @@ PeopleFilter.pager.setCurrentPage(5, true); // Will update pager and collection 
 
 ---------------------------------------
 
-#Filtering
+# Filtering
 
 This package brings easy configurable filters to play with Meteor Collections's documents.
 To allow filtering, the package needs to know what fields are allowed to filter by. So:
@@ -534,7 +532,7 @@ key: {
 
 *Note: the result of this configuration is a dynamic query passed to a subscriber and its publisher returning only filtered results based on recieved criteria.*
 
-##Templates helpers
+## Templates helpers
 
 ### Filter links
 
@@ -722,7 +720,7 @@ PeopleFilter.filter.clear();
 
 ---------------------------------------
 
-#Searching
+# Searching
 
 With the filter functionality we are able to set custom searches in no time.
 
@@ -737,7 +735,7 @@ With the filter functionality we are able to set custom searches in no time.
 When **fc-search-trigger** is clicked, the package will take the value **data-fc-search-trigger** and will look for a DOM element **data-fc-search-target** that match the value.
 Once there, will take all filters with the **searchable** value *('required' or 'optional')* and will perform a subscription update.
 
-##Template helpers
+## Template helpers
 
 There is a **fcFilterSearchable** helper with **criteria** and **available** as childs.
 
@@ -745,7 +743,7 @@ There is a **fcFilterSearchable** helper with **criteria** and **available** as 
 
 **available**: is a list with all "searchable" fields.
 
-###Toggle Search fields
+### Toggle Search fields
 
 ```html
 {{#each available}}
@@ -753,7 +751,7 @@ There is a **fcFilterSearchable** helper with **criteria** and **available** as 
 {{/each}}
 ```
 
-##Methods
+## Methods
 
 ### .search.getFields(required)
 
@@ -820,9 +818,9 @@ PeopleFilter.search.clear(); // will unset all the active search and filters.
 
 ---------------------------------------
 
-#Callbacks
+# Callbacks
 
-##Client side
+## Client side
 
 You can intercept the query object before sent to the server and you can also intercept the subscription once is ready.
 
@@ -866,7 +864,7 @@ PeopleFilter = new Meteor.FilterCollections(People, {
 
 **templateDestroyed**: append behaviours to Template.name.destroyed.
 
-##Server side
+## Server side
 
 ```javascript
 Meteor.FilterCollections.publish(People, {
@@ -906,7 +904,7 @@ Meteor.FilterCollections.publish(People, {
 
 ---------------------------------------
 
-#Queries
+# Queries
 
 To perform custom queries and still get paging, filter and other package functionalities, there is a public reactive data source available to use with the following methods.
 
@@ -939,7 +937,7 @@ Will set a new query and update subscription results.
 
 ---------------------------------------
 
-#Contributors
+# Contributors
 
 I've developed this module for a personal project when noticed that there was no tool at the moment that solve this common needs.
 
@@ -951,7 +949,7 @@ Thanks for reading!,
 
 ---------------------------------------
 
-#Donate
+# Donate
 
 An easy and effective way to support the continued maintenance of this package and the development of new and useful packages is to donate through [Gittip](https://www.gittip.com/julianmontagna/ "Gittip"). or [Paypal](http://www.julianmontagna.com.ar/filter-collections.html "Paypal").
 
@@ -961,6 +959,6 @@ Help build an ecosystem of well maintained, quality Meteor packages by joining t
 
 ---------------------------------------
 
-#Hire
+# Hire
 
 Need support, debugging, or development for your project? You can [hire](http://www.linkedin.com/in/julianmontagna "hire") me to help out.
